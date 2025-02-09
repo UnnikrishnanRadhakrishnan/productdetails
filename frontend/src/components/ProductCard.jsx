@@ -19,6 +19,7 @@ const ProductCard = ({ product }) => {
     const bg = useColorModeValue("white", "gray.800");
     const { deleteProduct, updateProduct } = useProductStore();
     const [isOpen, setIsOpen] = useState(false); 
+    const [isOpenWarning, setIsOpenWarning] = useState(false);
     const [updatedProduct, setUpdatedProduct] = useState(product);
 
     const handleDeleteProduct = async (id) => {
@@ -30,7 +31,7 @@ const ProductCard = ({ product }) => {
                 description: message,
             })
         }
-        else {
+       else {
             toaster.create({
                 title: "Success",
                 type: "success",
@@ -80,7 +81,7 @@ const ProductCard = ({ product }) => {
                     <IconButton onClick={() => setIsOpen(true)}>
                         <FaEdit size={20} />
                     </IconButton>
-                    <IconButton onClick = {()=> handleDeleteProduct(product._id)}>
+                    <IconButton onClick = {()=> setIsOpenWarning(true)}>
                         <RiDeleteBin5Fill size={20}/>
                     </IconButton>
                 </HStack>
@@ -119,7 +120,22 @@ const ProductCard = ({ product }) => {
                 </Button>
               </DialogFooter>
             </DialogContent>
-          </DialogRoot>
+                </DialogRoot>
+
+            <DialogRoot open={isOpenWarning} onOpenChange={setIsOpenWarning}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle> Warning </DialogTitle>
+              </DialogHeader>
+              <DialogBody pb="4">
+                Are you sure you want to delete the product?
+              </DialogBody>
+                <DialogFooter>
+                            <Button variant="outline" onClick = { () => handleDeleteProduct(product._id)}>Yes</Button>
+                            <Button variant="outline" onClick={() => setIsOpenWarning(false)}> No </Button>
+              </DialogFooter>
+            </DialogContent>
+                </DialogRoot>
             </Box>
         </Box>
     )
